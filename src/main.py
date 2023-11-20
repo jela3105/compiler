@@ -1,5 +1,5 @@
 """
-The main file that runs the program
+In this file, the program starts.
 """
 
 def main():
