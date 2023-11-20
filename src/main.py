@@ -2,5 +2,8 @@
 The main file that runs the program
 """
 
-print("This is working")
-print("second line")
+def main():
+    print("Hola mundo")
+
+if __name__ == "__main__":
+    main()
