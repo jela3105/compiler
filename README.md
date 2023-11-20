@@ -10,3 +10,5 @@ For colaboration [this is the guideline](https://github.com/jela3105/compiler/bl
 ### Installation
 - [Windows installation](https://github.com/jela3105/compiler/blob/main/documentation/developer-guideline.md)
 
+## Language rules for the programming language.
+- [This is the guide]() of the syntax rules for the programming laguage that this compiler consider.
