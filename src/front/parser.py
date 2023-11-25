@@ -82,16 +82,16 @@ class Parser:
             self.index += 1
             condition = self.parse_comparison_expr()
             if_token = self.parse_statement()
-            else_token = self.parse_statement() if self.tokens[self.index][0] == 'ELSE' else None
+            #print(self.tokens[self.index])
+            else_token = None
+            if self.tokens[self.index][0] == 'ELSE':
+                self.index += 1
+                else_token = self.parse_statement()
             return ('IF', condition, if_token, else_token)
 
         if token[0] == 'ID':
             #self.index += 1
             return self.parse_assignment()
-
-        if token[0] == ';':
-            self.index += 1
-            return None
 
         raise ValueError(f"(parse statement) Token inesperado: {token}")
 
