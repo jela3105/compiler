@@ -15,11 +15,10 @@ class Compiler:
         """starts the compilation process"""
         print("Tokens generados: ")
         self._run_lexyical_analysis()
+        print("Arbol sintactico (AST): ")
         statements = self._run_syntax_analysis()
-        #self._run_semantic_analysis(statements)
-        # print(statements)
-        # self._run_semantic_analysis(statements)
-        # return self.semantic_analyzer.results
+        self._run_semantic_analysis(statements)
+        return self.semantic_analyzer.results
 
     def _run_lexyical_analysis(self) -> None:
         """Start with lexycal analysis"""
