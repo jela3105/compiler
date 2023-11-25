@@ -67,11 +67,11 @@ class Lexer:
                 self.tokens.append(('ID', match.group()))
                 self.code = self.code[len(match.group()):]
             else:
-                raise ValueError(f"Invalid token: {self.code}")
+                raise ValueError(f"Token invalido: {self.code}")
 
         self.tokens.append(('EOF', ''))
 
     def print_tokens(self) -> None:
         """Print generated tokens"""
         for token in self.tokens:
-            print(f"{token},\n")
+            print(f"{token}")

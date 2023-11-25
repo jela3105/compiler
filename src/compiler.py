@@ -13,15 +13,19 @@ class Compiler:
 
     def compile(self):
         """starts the compilation process"""
+        print("Tokens generados: ")
         self._run_lexyical_analysis()
         statements = self._run_syntax_analysis()
-        self._run_semantic_analysis(statements)
-        return self.semantic_analyzer.results
+        #self._run_semantic_analysis(statements)
+        # print(statements)
+        # self._run_semantic_analysis(statements)
+        # return self.semantic_analyzer.results
 
     def _run_lexyical_analysis(self) -> None:
         """Start with lexycal analysis"""
         self.lexer = Lexer(self.source_code)
         self.lexer.tokenize()
+        self.lexer.print_tokens()
 
     def _run_syntax_analysis(self) -> list:
         """Start with syntax_analysis"""
