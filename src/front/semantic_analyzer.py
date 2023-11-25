@@ -8,10 +8,10 @@ class SemanticAnalyzer:
         self.results = []
 
     def evaluate_expr(self, expr):
-        """HOLA"""
-        if isinstance(expr, tuple):
+        """Evaluates a expression"""
+        if isinstance(expr, tuple) and len(expr) >= 3:
             op, left, right = expr
-            left_value = self.evaluate_expr(left)
+            left_value = self.evaluate_expr(left)#
             right_value = self.evaluate_expr(right)
 
             if op == '+':
@@ -38,21 +38,22 @@ class SemanticAnalyzer:
                 if isinstance(left, tuple) and left[0] == 'ID':
                     self.symbol_table[left[1]] = right_value
                 else:
-                    raise ValueError(f"Invalid assignment: {left}")
+                    raise ValueError(f"Asiganacion invalida: {left}")
             else:
-                raise ValueError(f"Invalid operation: {op}")
+                raise ValueError(f"Operacion invalida: {op}")
         elif expr[0] == 'ID':
             if expr[1] in self.symbol_table:
                 return self.symbol_table[expr[1]]
             else:
-                raise ValueError(f"Variable '{expr[1]}' not defined")
+                pass
         elif expr[0] == 'NUM':
             return expr[1]
 
     def analyze(self):
-        """HOLA"""
+        """Start with the analysis"""
         for statement in self.statements:
             if isinstance(statement, tuple) and statement[0] == 'IF':
+                print("es if")
                 condition = self.evaluate_expr(statement[1])
                 if condition:
                     result = self.analyze_statement(statement[2])
@@ -60,15 +61,17 @@ class SemanticAnalyzer:
                     result = self.analyze_statement(statement[3]) if statement[3] else None
                 self.results.append(result)
             elif isinstance(statement, tuple) and statement[0] == '=':
+                print("es asignacion")
                 self.evaluate_expr(statement)
                 self.results.append(None)
             elif statement is None:
+                print("es none")
                 self.results.append(None)
             else:
-                raise ValueError(f"Invalid statement: {statement}")
+                raise ValueError(f"Invalido: {statement}")
 
     def analyze_statement(self, statement):
-        """HOLA"""
+        """Analyze a statement"""
         if isinstance(statement, tuple) and statement[0] == 'IF':
             condition = self.evaluate_expr(statement[1])
             if condition:
@@ -81,4 +84,4 @@ class SemanticAnalyzer:
         elif statement is None:
             return None
         else:
-            raise ValueError(f"Invalid statement: {statement}")
+            raise ValueError(f"Invalido: {statement}")
