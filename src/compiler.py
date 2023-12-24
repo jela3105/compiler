@@ -20,6 +20,11 @@ class Compiler:
         self._run_semantic_analysis(statements)
         return self.semantic_analyzer.results
 
+    def read_code(self) -> None:
+        """reads code from file
+        TODO: recevie path as argument"""
+        return []
+
     def _run_lexyical_analysis(self) -> None:
         """Start with lexycal analysis"""
         self.lexer = Lexer(self.source_code)
