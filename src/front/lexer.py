@@ -6,68 +6,35 @@ class Lexer:
     def __init__(self, code):
         self.code = code
         self.tokens = []
-        self.keywords = {'+', '-', '*', '/', '==', '!=',
-                         '>', '<', '>=', '<=', 
-                         'NUM', 'ID', '=', ';', 'IF', 'ELSE','EOF'}
+        self.keywords = ('+', '-', '*', '/', '==', '!=',
+                         '>', '<', '>=', '<=','{','}', 
+                         '=', ';', 'IF', 'ELSE')
         self.index = 0
 
     def tokenize(self) -> None:
-        """Creates tokes looping throw the code"""
+        """Creates tokens of the given code"""
         while self.code:
             if self.code[0].isspace():
                 self.code = self.code[1:]
-            elif self.code.startswith('+'):
-                self.tokens.append(('+', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('-'):
-                self.tokens.append(('-', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('*'):
-                self.tokens.append(('*', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('/'):
-                self.tokens.append(('/', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('=='):
-                self.tokens.append(('==', ''))
-                self.code = self.code[2:]
-            elif self.code.startswith('!='):
-                self.tokens.append(('!=', ''))
-                self.code = self.code[2:]
-            elif self.code.startswith('>'):
-                self.tokens.append(('>', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('<'):
-                self.tokens.append(('<', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith('>='):
-                self.tokens.append(('>=', ''))
-                self.code = self.code[2:]
-            elif self.code.startswith('<='):
-                self.tokens.append(('<=', ''))
-                self.code = self.code[2:]
-            elif self.code.startswith('IF'):
-                self.tokens.append(('IF', ''))
-                self.code = self.code[2:]
-            elif self.code.startswith('ELSE'):
-                self.tokens.append(('ELSE', ''))
-                self.code = self.code[4:]
-            elif self.code.startswith('='):
-                self.tokens.append(('=', ''))
-                self.code = self.code[1:]
-            elif self.code.startswith(';'):
-                self.tokens.append((';', ''))
-                self.code = self.code[1:]
-            elif self.code[0].isdigit():
+                continue
+
+            if self.code[0].isdigit():
                 match = re.match(r'\d+', self.code)
                 self.tokens.append(('NUM', int(match.group())))
                 self.code = self.code[len(match.group()):]
-            elif self.code[0].isalpha():
+                continue
+
+            if self.code[0].isalpha():
                 match = re.match(r'[a-zA-Z_]\w*', self.code)
                 self.tokens.append(('ID', match.group()))
                 self.code = self.code[len(match.group()):]
-            else:
-                raise ValueError(f"Token invalido: {self.code}")
+                continue
+
+            for keyword in self.keywords:
+                if self.code.startswith(keyword):
+                    self.tokens.append((keyword, ''))
+                    self.code = self.code[len(keyword):]
+                    break
 
         self.tokens.append(('EOF', ''))
 
