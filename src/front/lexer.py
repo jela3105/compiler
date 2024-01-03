@@ -1,4 +1,4 @@
-"""Module to match regular expressions"""
+"""First pahse of compiler: lexical analysis"""
 import re
 
 class Lexer:
@@ -8,8 +8,7 @@ class Lexer:
         self.tokens = []
         self.keywords = ('+', '-', '*', '/', '==', '!=',
                          '>', '<', '>=', '<=','{','}', 
-                         '=', ';', 'IF', 'ELSE')
-        self.index = 0
+                         '=', ';', 'IF', 'ELSE', '(', ')')
 
     def tokenize(self) -> None:
         """Creates tokens of the given code"""
@@ -18,23 +17,29 @@ class Lexer:
                 self.code = self.code[1:]
                 continue
 
+            if self.code.startswith(self.keywords):
+                for keyword in self.keywords:
+                    if self.code.startswith(keyword):
+                        self.tokens.append((keyword, ''))
+                        self.code = self.code[len(keyword):]
+                        break
+                continue
+
+            #condition for numbers NUM
             if self.code[0].isdigit():
                 match = re.match(r'\d+', self.code)
                 self.tokens.append(('NUM', int(match.group())))
                 self.code = self.code[len(match.group()):]
                 continue
 
+            #condition for ID
             if self.code[0].isalpha():
                 match = re.match(r'[a-zA-Z_]\w*', self.code)
                 self.tokens.append(('ID', match.group()))
                 self.code = self.code[len(match.group()):]
                 continue
 
-            for keyword in self.keywords:
-                if self.code.startswith(keyword):
-                    self.tokens.append((keyword, ''))
-                    self.code = self.code[len(keyword):]
-                    break
+            raise ValueError(f"Token invalido: '{self.code[0]}'")
 
         self.tokens.append(('EOF', ''))
 
