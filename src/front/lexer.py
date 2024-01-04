@@ -8,7 +8,8 @@ class Lexer:
         self.tokens = []
         self.keywords = ('+', '-', '*', '/', '==', '!=',
                          '>', '<', '>=', '<=','{','}', 
-                         '=', ';', 'IF', 'ELSE', '(', ')')
+                         '=', ';', 'IF', 'ELSE', '(', ')',
+                         'AND', 'OR')
 
     def tokenize(self) -> None:
         """Creates tokens of the given code"""
