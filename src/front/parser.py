@@ -7,16 +7,12 @@ class Parser:
         self.index = 0
 
     def create_primary_node(self):
-        """Creates a node of the AST (a tuple)"""
+        """Creates a node of the AST (a tuple), for ID or NUM"""
         token = self.tokens[self.index]
 
-        if token[0] == 'NUM':
+        if token[0] == 'NUM' or token[0] == 'ID':
             self.index += 1
-            return ('NUM', token[1])
-
-        if token[0] == 'ID':
-            self.index += 1
-            return ('ID', token[1])
+            return token
 
         if token[0] == '(':
             self.index += 1
@@ -53,7 +49,7 @@ class Parser:
         return left
 
     def parse_assignment(self):
-        """creates subtree for a assignmet, left part is an ID, right is a expresion"""
+        """creates subtree for a assigment, left part is an ID, right is a expresion"""
         left = self.create_primary_node()
 
         if self.tokens[self.index][0] == '=':
@@ -63,73 +59,71 @@ class Parser:
         raise ValueError(f"Esperado '=' pero encontrado {self.tokens[self.index]}")
 
     def parse_comparison(self):
-        """Validates comparison syntaxis"""
-        if not self.tokens[self.index] == '(':
-            raise ValueError("(parse statement) expected '(' for if statement")
-
-        self.index += 1
+        """Parses a comparison '==', '!=','>', '<', '>=', '<=',"""
         left = self.parse_operations()
+        op = self.tokens[self.index][0]
+        self.index += 1
+        right = self.parse_operations()
+        return (op, left, right)
 
-        if self.tokens[self.index][0] in {'==', '!=', '>', '<', '>=', '<='}:
+    def parse_condition(self):
+        """Validates condition syntaxis"""
+        self.index += 1
+        left = self.parse_comparison()
+        while self.tokens[self.index][0] != ')':
             op = self.tokens[self.index][0]
             self.index += 1
-            right = self.parse_operations()
-            return (op, left, right)
-        else:
-            return left
+            right = self.parse_comparison()
+            left = (op, left, right)
+        self.index += 1
+        return left
 
     def get_if_condition(self):
         """return tokens for a if condition"""
         if self.tokens[self.index][0] != '(':
             token = self.tokens[self.index][0]
             raise ValueError(f"(parse statement) Token inesperado condicional if: {token}")
-        condition_tokens = []
-        while self.tokens[self.index][0] != '{':
-            condition_tokens.append(self.tokens[self.index])
-            self.index += 1
-        return condition_tokens
-
-    def valid_condition(self, condition):
-        """Check if a condition is valid in parentheses"""
-        open_parentheses = 0
-        for token in condition:
-            if token[0] == '(' :
-                open_parentheses += 1
-            elif token[0] == ')':
-                if open_parentheses == 0:
-                    raise ValueError("(parse statement) Parentesis inecesario")
-                open_parentheses -= 1
-        return not open_parentheses
+        return self.parse_condition()
 
     def get_if_body(self):
-        """return the body of if statement"""
+        """return the body of if statement stops when finds { and move index next position"""
         token = self.tokens[self.index][0]
         if token != '{':
-            raise ValueError(f"(parse statement) Token inesperado cuerpo if: {token}")
+            raise ValueError(f"(parse statement) esperado apertura llave, obtenido: {token[0]}")
         if_body_statements = []
         self.index += 1
         while self.tokens[self.index][0] != '}':
             statement = self.parse_statement()
             if statement is not None:
                 if_body_statements.append(statement)
+        self.index += 1
         return if_body_statements
 
     def parse_if_statement(self):
         """Analyze and creates nodes for if statement"""
         self.index += 1
+        if_branches = []
         initial_condition = self.get_if_condition()
-        if not self.valid_condition(initial_condition):
-            raise ValueError(f"(parse statement) Condicion no valida: {initial_condition}")
-        print(f"condicion inicial valida en parentesis: {initial_condition}")
         initial_body = self.get_if_body()
-        return ('IF', initial_condition, initial_body)
+        if_branches.append((initial_condition, initial_body))
+        while(self.tokens[self.index][0] == 'ELSE' or
+              self.tokens[self.index][0] == 'ELSEIF'):
+            if self.tokens[self.index][0] == 'ELSE':
+                self.index += 1
+                body = self.get_if_body()
+                if_branches.append(('', body))
+                break
+            condition = self.get_if_condition()
+            body = self.get_if_body()
+            if_branches.append((condition, body))
+
+        return ('IF', if_branches)
 
     def parse_if_condition(self):
         """Creates the nodes for if statement"""
         self.index += 1
         if_condition = self.parse_comparison()
         if_body_statements = self.parse_statement()
-        #print(self.tokens[self.index])
         else_body_statements = None
         if self.tokens[self.index][0] == 'ELSE':
             self.index += 1
@@ -144,7 +138,6 @@ class Parser:
             return self.parse_if_statement()
 
         if token[0] == 'ID':
-            #self.index += 1
             return self.parse_assignment()
 
         raise ValueError(f"(parse statement) Token inesperado: {token}")
