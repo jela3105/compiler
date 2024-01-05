@@ -42,17 +42,16 @@ class SemanticAnalyzer:
 
         left = operations[1]
         right = operations[2]
-
         if len(left) == 2 and left[0] == 'ID':
-            if not self.is_in_symbol_table(left[0]):
-                raise ValueError(f"Error semantico: No se ha declarado {left[0]}")
+            if not self.is_in_symbol_table(left[1]):
+                raise ValueError(f"Error semantico: No se ha declarado {left[1]}")
         if len(right) == 2 and right[0] == 'ID':
-            if not self.is_in_symbol_table(left[0]):
-                raise ValueError(f"Error semantico: No se ha declarado {right[0]}")
+            if not self.is_in_symbol_table(right[1]):
+                raise ValueError(f"Error semantico: No se ha declarado {right[1]}")
         if len(left) > 2:
             self.evaluate_operation(left)
         if len(right) > 2:
-            self.evaluate_assignment(right)
+            self.evaluate_operation(right)
 
     def evaluate_assignment(self, statement):
         """Analyze an assigment"""
@@ -60,6 +59,7 @@ class SemanticAnalyzer:
         right = statement[2]
         self.evaluate_operation(right)
         self.symbol_table[left[1]] = right
+        print(self.symbol_table)
         return True
 
     def analyze(self):
