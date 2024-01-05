@@ -62,6 +62,9 @@ class Parser:
         """Parses a comparison '==', '!=','>', '<', '>=', '<=',"""
         left = self.parse_operations()
         op = self.tokens[self.index][0]
+        if(op not in {'==', '!=','>', '<', '>=', '<='}):
+            raise ValueError(f"Token {op} no permitido en comparacion")
+
         self.index += 1
         right = self.parse_operations()
         return (op, left, right)
