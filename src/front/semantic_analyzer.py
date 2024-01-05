@@ -7,81 +7,70 @@ class SemanticAnalyzer:
         self.symbol_table = {}
         self.results = []
 
-    def evaluate_expr(self, expr):
-        """Evaluates a expression"""
-        if isinstance(expr, tuple) and len(expr) >= 3:
-            op, left, right = expr
-            left_value = self.evaluate_expr(left)#
-            right_value = self.evaluate_expr(right)
+    def is_in_symbol_table(self, variable):
+        """Checks if a variable is already in symbol table"""
+        return variable in self.symbol_table
 
-            if op == '+':
-                return left_value + right_value
-            elif op == '-':
-                return left_value - right_value
-            elif op == '*':
-                return left_value * right_value
-            elif op == '/':
-                return left_value // right_value
-            elif op == '==':
-                return left_value == right_value
-            elif op == '!=':
-                return left_value != right_value
-            elif op == '>':
-                return left_value > right_value
-            elif op == '<':
-                return left_value < right_value
-            elif op == '>=':
-                return left_value >= right_value
-            elif op == '<=':
-                return left_value <= right_value
-            elif op == '=':
-                if isinstance(left, tuple) and left[0] == 'ID':
-                    self.symbol_table[left[1]] = right_value
-                else:
-                    raise ValueError(f"Asiganacion invalida: {left}")
-            else:
-                raise ValueError(f"Operacion invalida: {op}")
-        elif expr[0] == 'ID':
-            if expr[1] in self.symbol_table:
-                return self.symbol_table[expr[1]]
-            else:
-                pass
-        elif expr[0] == 'NUM':
-            return expr[1]
+    def evaluate_conditional(self, condition):
+        """Analyze a conditional"""
+        print(condition)
+
+        if len(condition) < 2:
+            return
+
+        if len(condition) == 3:
+            self.evaluate_conditional(condition[1])
+            self.evaluate_conditional(condition[2])
+
+        if len(condition) == 2:
+            token_type, value = condition
+            if token_type == 'ID':
+                if not self.is_in_symbol_table(value):
+                    raise ValueError(f"(semantic error) {value} no se ha declarado")
+
+    def evaluate_if_expr(self, if_branches):
+        """Analyze a if expression"""
+        for branch in if_branches:
+            self.evaluate_conditional(branch[0])
+            for statement in branch[1]:
+                self.statements.append(statement)
+
+    def evaluate_operation(self, operations):
+        """Evaluate semantic of basic operations"""
+        if len(operations) == 2:
+            return
+
+        left = operations[1]
+        right = operations[2]
+
+        if len(left) == 2 and left[0] == 'ID':
+            if not self.is_in_symbol_table(left[0]):
+                raise ValueError(f"Error semantico: No se ha declarado {left[0]}")
+        if len(right) == 2 and right[0] == 'ID':
+            if not self.is_in_symbol_table(left[0]):
+                raise ValueError(f"Error semantico: No se ha declarado {right[0]}")
+        if len(left) > 2:
+            self.evaluate_operation(left)
+        if len(right) > 2:
+            self.evaluate_assignment(right)
+
+    def evaluate_assignment(self, statement):
+        """Analyze an assigment"""
+        left = statement[1]
+        right = statement[2]
+        self.evaluate_operation(right)
+        self.symbol_table[left[1]] = right
+        return True
 
     def analyze(self):
         """Start with the analysis"""
         for statement in self.statements:
             if isinstance(statement, tuple) and statement[0] == 'IF':
-                print("es if")
-                condition = self.evaluate_expr(statement[1])
-                if condition:
-                    result = self.analyze_statement(statement[2])
-                else:
-                    result = self.analyze_statement(statement[3]) if statement[3] else None
-                self.results.append(result)
+                self.evaluate_if_expr(statement[1])
+                print("if valido")
             elif isinstance(statement, tuple) and statement[0] == '=':
-                print("es asignacion")
-                self.evaluate_expr(statement)
-                self.results.append(None)
-            elif statement is None:
-                print("es none")
-                self.results.append(None)
+                self.evaluate_assignment(statement)
+                print("asignacion valida")
             else:
                 raise ValueError(f"Invalido: {statement}")
-
-    def analyze_statement(self, statement):
-        """Analyze a statement"""
-        if isinstance(statement, tuple) and statement[0] == 'IF':
-            condition = self.evaluate_expr(statement[1])
-            if condition:
-                return self.analyze_statement(statement[2])
-            else:
-                return self.analyze_statement(statement[3]) if statement[3] else None
-        elif isinstance(statement, tuple) and statement[0] == '=':
-            self.evaluate_expr(statement)
-            return None
-        elif statement is None:
-            return None
-        else:
-            raise ValueError(f"Invalido: {statement}")
+        return self.symbol_table
