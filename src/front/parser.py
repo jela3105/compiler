@@ -109,9 +109,9 @@ class Parser:
         initial_condition = self.get_if_condition()
         initial_body = self.get_if_body()
         if_branches.append((initial_condition, initial_body))
-        while(self.tokens[self.index][0] == 'ELSE' or
-              self.tokens[self.index][0] == 'ELSEIF'):
-            if self.tokens[self.index][0] == 'ELSE':
+        while(self.tokens[self.index][0] == 'else' or
+              self.tokens[self.index][0] == 'elif'):
+            if self.tokens[self.index][0] == 'else':
                 self.index += 1
                 body = self.get_if_body()
                 if_branches.append(('', body))
@@ -120,7 +120,7 @@ class Parser:
             body = self.get_if_body()
             if_branches.append((condition, body))
 
-        return ('IF', if_branches)
+        return ('if', if_branches)
 
     def parse_if_condition(self):
         """Creates the nodes for if statement"""
@@ -128,16 +128,16 @@ class Parser:
         if_condition = self.parse_comparison()
         if_body_statements = self.parse_statement()
         else_body_statements = None
-        if self.tokens[self.index][0] == 'ELSE':
+        if self.tokens[self.index][0] == 'else':
             self.index += 1
             else_body_statements = self.parse_statement()
-        return ('IF', if_condition, if_body_statements, else_body_statements)
+        return ('if', if_condition, if_body_statements, else_body_statements)
 
     def parse_statement(self):
         """Validates the token, it can be IF statement or ID"""
         token = self.tokens[self.index]
 
-        if token[0] == 'IF':
+        if token[0] == 'if':
             return self.parse_if_statement()
 
         if token[0] == 'ID':

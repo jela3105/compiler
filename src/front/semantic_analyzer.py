@@ -65,7 +65,7 @@ class SemanticAnalyzer:
     def analyze(self):
         """Start with the analysis"""
         for statement in self.statements:
-            if isinstance(statement, tuple) and statement[0] == 'IF':
+            if isinstance(statement, tuple) and statement[0] == 'if':
                 self.evaluate_if_expr(statement[1])
                 print("if valido")
             elif isinstance(statement, tuple) and statement[0] == '=':

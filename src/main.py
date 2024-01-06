@@ -9,13 +9,14 @@ def main():
     source_code = """
     x = 10
     y = 11
-    IF x > 0
-        IF x == 1
-            x = 0
-        ELSE 
-            z = 1 
-    ELSE 
+    if (x > 0){
+        x = 0
+        z = 1 
+    }elif(x < 2){
         y = 0
+    }else{
+        id = x + y
+    }
     """
 
     compiler = Compiler(source_code)
