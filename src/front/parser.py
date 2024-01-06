@@ -116,6 +116,7 @@ class Parser:
                 body = self.get_if_body()
                 if_branches.append(('', body))
                 break
+            self.index += 1
             condition = self.get_if_condition()
             body = self.get_if_body()
             if_branches.append((condition, body))
