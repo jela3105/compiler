@@ -4,6 +4,7 @@ from front.lexer import Lexer
 from front.parser import Parser
 from front.semantic_analyzer import SemanticAnalyzer
 from back.intermediate_code_generator import IntermediateCodeGenerator
+from back.target_code_generator import TargetCodeGenerator
 
 class Compiler:
     """Class that runs each compiler phase"""
@@ -12,7 +13,8 @@ class Compiler:
         self.lexer = None
         self.parser = None
         self.semantic_analyzer = None
-        self.intermediate_code_generator= None
+        self.intermediate_code_generator = None
+        self.target_code_generator = None
 
     def compile(self):
         """starts the compilation process------"""
@@ -24,7 +26,9 @@ class Compiler:
         #we send a copy so it doesn't modify the original statements
         self._run_semantic_analysis(copy.copy(statements))
         print("------Codigo intermedio------")
-        self._create_intermediate_code(statements)
+        intermediate_code = self._create_intermediate_code(statements)
+        print("------Codigo objeto------")
+        self._create_target_code(intermediate_code)
 
     def read_code(self) -> None:
         """reads code from file
@@ -49,5 +53,9 @@ class Compiler:
 
     def _create_intermediate_code(self, statements) -> None:
         self.intermediate_code_generator = IntermediateCodeGenerator(statements)
-        self.intermediate_code_generator.generate_intermediate_code()
+        return self.intermediate_code_generator.generate_intermediate_code()
+
+    def _create_target_code(self, intermediate_code):
+        self.target_code_generator = TargetCodeGenerator(intermediate_code)
+        self.target_code_generator.generate_8086_code()
  

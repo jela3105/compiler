@@ -118,3 +118,4 @@ class IntermediateCodeGenerator:
             if statement[0] == 'if':
                 self.generate_if(statement[1])
         print(self.intermediate_code)
+        return self.intermediate_code
