@@ -13,9 +13,8 @@ class SemanticAnalyzer:
 
     def evaluate_conditional(self, condition):
         """Analyze a conditional"""
-        print(condition)
 
-        if len(condition) < 2:
+        if len(condition) < 2: #case of else
             return
 
         if len(condition) == 3:
@@ -32,6 +31,7 @@ class SemanticAnalyzer:
         """Analyze a if expression"""
         for branch in if_branches:
             self.evaluate_conditional(branch[0])
+            print("condicion valida")
             for statement in branch[1]:
                 self.statements.append(statement)
 
@@ -59,7 +59,6 @@ class SemanticAnalyzer:
         right = statement[2]
         self.evaluate_operation(right)
         self.symbol_table[left[1]] = right
-        print(self.symbol_table)
         return True
 
     def analyze(self):
