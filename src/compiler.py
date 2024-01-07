@@ -1,7 +1,9 @@
 """Compiler module"""
+import copy
 from front.lexer import Lexer
 from front.parser import Parser
 from front.semantic_analyzer import SemanticAnalyzer
+from back.intermediate_code_generator import IntermediateCodeGenerator
 
 class Compiler:
     """Class that runs each compiler phase"""
@@ -10,15 +12,19 @@ class Compiler:
         self.lexer = None
         self.parser = None
         self.semantic_analyzer = None
+        self.intermediate_code_generator= None
 
     def compile(self):
-        """starts the compilation process"""
-        print("Tokens generados: ")
+        """starts the compilation process------"""
+        print("------Tokens generados------")
         self._run_lexyical_analysis()
-        print("Arbol sintactico (AST): ")
+        print("------Arbol sintactico (AST)------")
         statements = self._run_syntax_analysis()
-        self._run_semantic_analysis(statements)
-        return self.semantic_analyzer.results
+        print("------Analisis semantico------")
+        #we send a copy so it doesn't modify the original statements
+        self._run_semantic_analysis(copy.copy(statements))
+        print("------Codigo intermedio------")
+        self._create_intermediate_code(statements)
 
     def read_code(self) -> None:
         """reads code from file
@@ -40,4 +46,8 @@ class Compiler:
         """Start with syntax_analysis"""
         self.semantic_analyzer = SemanticAnalyzer(statements)
         self.semantic_analyzer.analyze()
+
+    def _create_intermediate_code(self, statements) -> None:
+        self.intermediate_code_generator = IntermediateCodeGenerator(statements)
+        self.intermediate_code_generator.generate_intermediate_code()
  
