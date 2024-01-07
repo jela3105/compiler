@@ -11,7 +11,6 @@ class TargetCodeGenerator:
 
     def create_8086_file(self):
         """create the file in the same directory where the project is running"""
-        f = open('objetofile.asm','w', encoding="utf-8")
         self.string_target_code = str(f"""
 .model small
 .stack
@@ -24,8 +23,9 @@ end begin""")
 
         print(self.string_target_code)
 
-        f.write(self.string_target_code)
-        f.close()
+        with open('objetofile.asm','w', encoding="utf-8") as file:
+            file.write(self.string_target_code)
+            file.close()
 
     def append_assigment(self, line) -> str:
         """Assing new value to the give variable"""
