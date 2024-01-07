@@ -58,11 +58,16 @@ class Parser:
             return ('=', left, right)
         raise ValueError(f"Esperado '=' pero encontrado {self.tokens[self.index]}")
 
+    def _valid_comparison_symbol(self, symbol):
+        if symbol in {'==', '!=','>', '<', '>=', '<=', 'and', 'or'}:
+            return True
+        return False
+
     def parse_comparison(self):
         """Parses a comparison '==', '!=','>', '<', '>=', '<=',"""
         left = self.parse_operations()
         op = self.tokens[self.index][0]
-        if(op not in {'==', '!=','>', '<', '>=', '<='}):
+        if not self._valid_comparison_symbol(op):
             raise ValueError(f"Token {op} no permitido en comparacion")
 
         self.index += 1
@@ -75,6 +80,8 @@ class Parser:
         left = self.parse_comparison()
         while self.tokens[self.index][0] != ')':
             op = self.tokens[self.index][0]
+            if not self._valid_comparison_symbol(op):
+                raise ValueError(f"Token {op} no permitido en comparacion")
             self.index += 1
             right = self.parse_comparison()
             left = (op, left, right)
