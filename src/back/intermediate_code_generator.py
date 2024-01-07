@@ -9,7 +9,7 @@ class IntermediateCodeGenerator:
 
     def _do_operation(self, op, left, right):
         if left in self.symbol_table:
-            left = self.symbol_table[left] 
+            left = self.symbol_table[left]
 
         if right in self.symbol_table:
             right = self.symbol_table[right]
