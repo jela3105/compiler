@@ -112,6 +112,13 @@ class IntermediateCodeGenerator:
                 self.generate_branch_code(branch[1])
                 return
 
+    def generate_print(self, statement):
+        """append intermediate code for printing"""
+        if statement[1][0] == 'ID':
+            self.intermediate_code.append(("print", self.symbol_table[statement[1][1]]))
+        else:
+            self.intermediate_code.append(("print", statement[1][1]))
+
     def generate_intermediate_code(self):
         """Start the generation of the intermediate code"""
         for statement in self.statements:
@@ -120,5 +127,7 @@ class IntermediateCodeGenerator:
                 self.generate_assignment(statement)
             if statement[0] == 'if':
                 self.generate_if(statement[1])
+            if statement[0] == 'print':
+                self.generate_print(statement)
         print(self.intermediate_code)
         return self.intermediate_code

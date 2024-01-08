@@ -64,12 +64,14 @@ class SemanticAnalyzer:
     def analyze(self):
         """Start with the analysis"""
         for statement in self.statements:
-            if isinstance(statement, tuple) and statement[0] == 'if':
+            if statement[0] == 'if':
                 self.evaluate_if_expr(statement[1])
                 print("if valido")
-            elif isinstance(statement, tuple) and statement[0] == '=':
+            elif statement[0] == '=':
                 self.evaluate_assignment(statement)
                 print("asignacion valida")
+            elif statement[0] == 'print':
+                pass
             else:
                 raise ValueError(f"Invalido: {statement}")
         return self.symbol_table

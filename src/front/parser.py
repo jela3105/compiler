@@ -59,7 +59,6 @@ class Parser:
             raise ValueError(f"Esperado una variable o un string, {self.tokens[self.index]}")
         statement = ('print', self.tokens[self.index])
         self.index += 2
-        print(self.tokens[self.index])
         return statement
 
     def parse_assignment(self):
