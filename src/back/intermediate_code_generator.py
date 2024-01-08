@@ -18,7 +18,7 @@ class IntermediateCodeGenerator:
             '+': (left + right),
             '-': (left - right),
             '*': (left * right),
-            '/': (left / right)
+            '/': (left // right)
         }
         return operations[op]
 
