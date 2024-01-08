@@ -1,4 +1,4 @@
-"""Seconde module of compiler: syntax analysis"""
+"""Second module of compiler: syntax analysis"""
 
 class Parser:
     """Class to run the syntax analysis, creating the AST"""
@@ -22,7 +22,7 @@ class Parser:
                 return expr
             raise ValueError(f"Esperado ')' pero no se encontro{self.tokens[self.index]}")
 
-        raise ValueError(f"(Parse primary) Token inesperado: {token} {self.index}")
+        raise ValueError(f"Token inesperado: {token} {self.index}")
 
     def parse_term(self):
         """Define order of operations"""
