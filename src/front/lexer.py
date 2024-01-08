@@ -8,7 +8,7 @@ class Lexer:
         self.tokens = []
         self.keywords = ('+', '-', '*', '/', '==', '!=',
                          '>', '<', '>=', '<=','{','}', 
-                         '=', ';', 'if', 'else', 'elif', '(', ')',
+                         '=', 'if', 'else', 'elif', '(', ')',
                          'and', 'or', 'print')
 
     def tokenize(self) -> None:
