@@ -43,17 +43,20 @@ class IntermediateCodeGenerator:
             return len(self._temporal_variables) -1
 
         op, left, right = statement
-        if len(right) == 2:
+        if len(right) == 2 and len(left) == 2:
             self._temporal_variables.append(self._do_operation(op, left[1],right[1]))
             return len(self._temporal_variables) - 1
+
         temp_right_index = self.generate_operation(right)
-        op_result = self._temporal_variables[temp_right_index]
-        self._temporal_variables.append(self._do_operation(op, left[1], op_result))
+        right_result = self._temporal_variables[temp_right_index]
+        temp_left_index = self.generate_operation(left)
+        left_result = self._temporal_variables[temp_left_index]
+        self._temporal_variables.append(self._do_operation(op, left_result, right_result))
         return len(self._temporal_variables) - 1
 
     def generate_assignment(self, statement):
         """creates intermediate code for assignment"""
-        print(f"generate assigment {statement}")
+        print(statement)
         op = statement[0]
         left = statement[1]
         right = statement[2]

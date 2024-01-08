@@ -7,16 +7,16 @@ def main():
     """Main function, here the program starts"""
 
     source_code = """
-    x = 10
-    y = 11
-    if (x > 0){
+    var1 = 10
+    var2 = var1 - 5 
+    if (var2 > 10){
         x = 0
-        z = 1 
-    }elif(x < 2){
+    }elif(var2 < 2){
         y = 0
     }else{
-        id = x + y
+        z = 1 
     }
+    
     """
 
     compiler = Compiler(source_code)
