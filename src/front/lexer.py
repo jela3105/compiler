@@ -9,7 +9,7 @@ class Lexer:
         self.keywords = ('+', '-', '*', '/', '==', '!=',
                          '>', '<', '>=', '<=','{','}', 
                          '=', ';', 'if', 'else', 'elif', '(', ')',
-                         'and', 'or')
+                         'and', 'or', 'print')
 
     def tokenize(self) -> None:
         """Creates tokens of the given code"""
@@ -17,6 +17,15 @@ class Lexer:
             if self.code[0].isspace():
                 self.code = self.code[1:]
                 continue
+
+            if self.code[0].startswith('"'):
+                self.code = self.code[1:]
+                string = ""
+                while self.code[0] != '"':
+                    string += self.code[0]
+                    self.code = self.code[1:]
+                self.tokens.append(("string", string))
+                self.code = self.code[1:]
 
             if self.code.startswith(self.keywords):
                 for keyword in self.keywords:

@@ -48,6 +48,20 @@ class Parser:
 
         return left
 
+    def parse_print(self):
+        """crates a statement for printing a variable or string"""
+        self.index += 1
+        if self.tokens[self.index][0] != "(":
+            raise ValueError(f"Esperado '(' pero encontrado {self.tokens[self.index]}")
+
+        self.index += 1
+        if self.tokens[self.index][0] not in {'string', 'ID'}:
+            raise ValueError(f"Esperado una variable o un string, {self.tokens[self.index]}")
+        statement = ('print', self.tokens[self.index])
+        self.index += 2
+        print(self.tokens[self.index])
+        return statement
+
     def parse_assignment(self):
         """creates subtree for a assigment, left part is an ID, right is a expresion"""
         left = self.create_primary_node()
@@ -150,6 +164,9 @@ class Parser:
 
         if token[0] == 'ID':
             return self.parse_assignment()
+
+        if token[0] == 'print':
+            return self.parse_print()
 
         raise ValueError(f"(parse statement) Token inesperado: {token}")
 
