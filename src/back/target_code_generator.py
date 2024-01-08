@@ -23,7 +23,7 @@ end begin""")
 
         print(self.string_target_code)
 
-        with open('objetofile.asm','w', encoding="utf-8") as file:
+        with open('codiguito.asm','w', encoding="utf-8") as file:
             file.write(self.string_target_code)
             file.close()
 
