@@ -37,17 +37,26 @@ mov {line[1]}, {line[2]}d
 """)
 
     def _generate_print_number(self, number) -> str:
-        return str(f"""
-mov dx, {number}
-add dl, 30h
+        result = str("""
+mov dx, 13 
 mov ah, 2
 int 21h
 """)
 
+        for digit in str(number):
+            template = str(f"""
+mov dx, {digit}
+add dl, 30h
+mov ah, 2
+int 21h
+""")
+            result += template
+        return result
+
     def _generate_print_string(self, string) -> str:
         self._strings_variables.append(string)
         string_index = len(self._strings_variables) - 1
-        self._data_target_code += str(f"""str{string_index} db 10, 13, '{string} $'
+        self._data_target_code += str(f"""str{string_index} db 10, 13, '{string} ', 10, 13, '$'
 """)
 
         return str(f"""

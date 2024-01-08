@@ -104,6 +104,8 @@ class IntermediateCodeGenerator:
                 self.generate_assignment(statement)
             if statement[0] == 'if':
                 self.generate_if(statement[1])
+            if statement[0] == 'print':
+                self.generate_print(statement)
 
     def generate_if(self, if_branches):
         """checks branches conditions and writes the branch that is true"""
