@@ -49,7 +49,7 @@ class Lexer:
                 self.code = self.code[len(match.group()):]
                 continue
 
-            raise ValueError(f"Token invalido: '{self.code[0]}'")
+            raise ValueError(f"Invalid token: '{self.code[0]}'")
 
         self.tokens.append(('EOF', ''))
 

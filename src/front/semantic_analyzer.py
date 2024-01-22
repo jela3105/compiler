@@ -25,7 +25,7 @@ class SemanticAnalyzer:
             token_type, value = condition
             if token_type == 'ID':
                 if not self.is_in_symbol_table(value):
-                    raise ValueError(f"(semantic error) {value} no se ha declarado")
+                    raise ValueError(f"(semantic error) {value} is not declared")
 
     def evaluate_if_expr(self, if_branches):
         """Analyze a if expression"""
@@ -44,10 +44,10 @@ class SemanticAnalyzer:
         right = operations[2]
         if len(left) == 2 and left[0] == 'ID':
             if not self.is_in_symbol_table(left[1]):
-                raise ValueError(f"Error semantico: No se ha declarado {left[1]}")
+                raise ValueError(f"Semantic error: Not declared {left[1]}")
         if len(right) == 2 and right[0] == 'ID':
             if not self.is_in_symbol_table(right[1]):
-                raise ValueError(f"Error semantico: No se ha declarado {right[1]}")
+                raise ValueError(f"Semantic error: Not declared {right[1]}")
         if len(left) > 2:
             self.evaluate_operation(left)
         if len(right) > 2:
@@ -73,5 +73,5 @@ class SemanticAnalyzer:
             elif statement[0] == 'print':
                 pass
             else:
-                raise ValueError(f"Invalido: {statement}")
+                raise ValueError(f"Invalid: {statement}")
         return self.symbol_table

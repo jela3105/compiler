@@ -18,16 +18,16 @@ class Compiler:
 
     def compile(self):
         """starts the compilation process------"""
-        print("------Tokens generados------")
+        print("------Generated tokens------")
         self._run_lexyical_analysis()
-        print("------Arbol sintactico (AST)------")
+        print("------Syntax tree(AST)------")
         statements = self._run_syntax_analysis()
-        print("------Analisis semantico------")
+        print("------Semantic Analysis------")
         #we send a copy so it doesn't modify the original statements
         self._run_semantic_analysis(copy.copy(statements))
-        print("------Codigo intermedio------")
+        print("------Intemediate Code------")
         intermediate_code = self._create_intermediate_code(statements)
-        print("------Codigo objeto------")
+        print("------Object code------")
         self._create_target_code(intermediate_code)
 
     def read_code(self, path = "") -> None:

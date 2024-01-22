@@ -20,9 +20,9 @@ class Parser:
             if self.tokens[self.index][0] == ')':
                 self.index += 1
                 return expr
-            raise ValueError(f"Esperado ')' pero no se encontro{self.tokens[self.index]}")
+            raise ValueError(f"Expected ')' but not found {self.tokens[self.index]}")
 
-        raise ValueError(f"Token inesperado: {token} {self.index}")
+        raise ValueError(f"Unexpected token: {token} {self.index}")
 
     def parse_term(self):
         """Define order of operations"""
@@ -52,11 +52,11 @@ class Parser:
         """crates a statement for printing a variable or string"""
         self.index += 1
         if self.tokens[self.index][0] != "(":
-            raise ValueError(f"Esperado '(' pero encontrado {self.tokens[self.index]}")
+            raise ValueError(f"Expected '(' but not found {self.tokens[self.index]}")
 
         self.index += 1
         if self.tokens[self.index][0] not in {'string', 'ID'}:
-            raise ValueError(f"Esperado una variable o un string, {self.tokens[self.index]}")
+            raise ValueError(f"Expected a variable or string, {self.tokens[self.index]}")
         statement = ('print', self.tokens[self.index])
         self.index += 2
         return statement
@@ -69,7 +69,7 @@ class Parser:
             self.index += 1
             right = self.parse_operations()
             return ('=', left, right)
-        raise ValueError(f"Esperado '=' pero encontrado {self.tokens[self.index]}")
+        raise ValueError(f"Expected '=' but not found {self.tokens[self.index]}")
 
     def _valid_comparison_symbol(self, symbol):
         if symbol in {'==', '!=','>', '<', '>=', '<=', 'and', 'or'}:
@@ -81,7 +81,7 @@ class Parser:
         left = self.parse_operations()
         op = self.tokens[self.index][0]
         if not self._valid_comparison_symbol(op):
-            raise ValueError(f"Token {op} no permitido en comparacion")
+            raise ValueError(f"Token {op} not allowed in comparison")
 
         self.index += 1
         right = self.parse_operations()
@@ -94,7 +94,7 @@ class Parser:
         while self.tokens[self.index][0] != ')':
             op = self.tokens[self.index][0]
             if not self._valid_comparison_symbol(op):
-                raise ValueError(f"Token {op} no permitido en comparacion")
+                raise ValueError(f"Token {op} not allowed in comparison")
             self.index += 1
             right = self.parse_comparison()
             left = (op, left, right)
@@ -105,14 +105,14 @@ class Parser:
         """return tokens for a if condition"""
         if self.tokens[self.index][0] != '(':
             token = self.tokens[self.index][0]
-            raise ValueError(f"(parse statement) Token inesperado condicional if: {token}")
+            raise ValueError(f"(parse statement) Unexpected token in if conditional: {token}")
         return self.parse_condition()
 
     def get_if_body(self):
         """return the body of if statement stops when finds { and move index next position"""
         token = self.tokens[self.index][0]
         if token != '{':
-            raise ValueError(f"(parse statement) esperado apertura llave, obtenido: {token[0]}")
+            raise ValueError(f"(parse statement) Expected curly open bracket but found: {token[0]}")
         if_body_statements = []
         self.index += 1
         while self.tokens[self.index][0] != '}':
@@ -167,7 +167,7 @@ class Parser:
         if token[0] == 'print':
             return self.parse_print()
 
-        raise ValueError(f"(parse statement) Token inesperado: {token}")
+        raise ValueError(f"(parse statement) Unexpected token: {token}")
 
     def parse(self) -> list:
         """Iterate each token to create the AST"""
