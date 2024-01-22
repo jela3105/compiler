@@ -8,8 +8,8 @@ from back.target_code_generator import TargetCodeGenerator
 
 class Compiler:
     """Class that runs each compiler phase"""
-    def __init__(self, source_code):
-        self.source_code = source_code
+    def __init__(self):
+        self.source_code = None
         self.lexer = None
         self.parser = None
         self.semantic_analyzer = None
@@ -30,10 +30,11 @@ class Compiler:
         print("------Codigo objeto------")
         self._create_target_code(intermediate_code)
 
-    def read_code(self) -> None:
-        """reads code from file
-        TODO: recevie path as argument"""
-        return []
+    def read_code(self, path = "") -> None:
+        """reads code from file"""
+        with open(path + "codiguito.txt", "r", encoding="utf-8") as f:
+            self.source_code = f.read()
+            f.close()
 
     def _run_lexyical_analysis(self) -> None:
         """Start with lexycal analysis"""
